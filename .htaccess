@@ -1,0 +1,50 @@
+# BEGIN iThemes Security - Do not modify or remove this line
+# iThemes Security Config Details: 2
+	# Pass through Authorization header.
+	<IfModule mod_rewrite.c>
+		RewriteEngine On
+		RewriteCond %{HTTP:Authorization} ^(.*)
+		RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+	</IfModule>
+
+	# Ban Hosts - Security > Settings > Banned Users
+	SetEnvIF REMOTE_ADDR "^40\.119\.52\.57$" DenyAccess
+	SetEnvIF X-FORWARDED-FOR "^40\.119\.52\.57$" DenyAccess
+	SetEnvIF X-CLUSTER-CLIENT-IP "^40\.119\.52\.57$" DenyAccess
+
+	SetEnvIF REMOTE_ADDR "^52\.187\.49\.227$" DenyAccess
+	SetEnvIF X-FORWARDED-FOR "^52\.187\.49\.227$" DenyAccess
+	SetEnvIF X-CLUSTER-CLIENT-IP "^52\.187\.49\.227$" DenyAccess
+
+	<IfModule mod_authz_core.c>
+		<RequireAll>
+			Require all granted
+			Require not env DenyAccess
+			Require not ip 40.119.52.57
+			Require not ip 52.187.49.227
+		</RequireAll>
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Allow from all
+		Deny from env=DenyAccess
+		Deny from 40.119.52.57
+		Deny from 52.187.49.227
+	</IfModule>
+# END iThemes Security - Do not modify or remove this line
+
+# BEGIN WordPress
+# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
